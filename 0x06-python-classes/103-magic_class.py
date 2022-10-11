@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-# 103-magic_calculation.py
+# 103-magic_class.py
 
 # andu
 
-"""Define a MagicClass matching exactly a bytecode provided by Holberton."""
+"""Define a MagicClass matching exactly a bytecode the same python code."""
 
 
 
