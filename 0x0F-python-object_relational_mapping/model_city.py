@@ -1,41 +1,38 @@
 #!/usr/bin/python3
 
-# Defines a City model.
-
-# Inherits from SQLAlchemy Base and links to the MySQL table cities.
+"""This is the City module.
 
 
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+Contains the City class that inherits from Base = declarative_base()
 
-from sqlalchemy.ext.declarative import declarative_base
+"""
 
+from sqlalchemy import Column, Integer, String
 
+from sqlalchemy.sql.schema import ForeignKey
 
-Base = declarative_base()
-
-
-
+from model_state import Base
 
 
 class City(Base):
 
-    """Represents a city for a MySQL database.
+    """This class links to the `cities` table of our database.
+
+
 
     Attributes:
 
-        id (str): The city's id.
+        id (int): id of the city.
 
-        name (sqlalchemy.Integer): The city's name.
+        name (str): name of the city.
 
-        state_id (sqlalchemy.String): The city's state id.
+        state_id (int): id of the associated state.
 
     """
-
-    __tablename__ = "cities"
-
-    id = Column(Integer, primary_key=True)
+    __tablename__ = 'cities'
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
 
     name = Column(String(128), nullable=False)
 
-    state_id = Column(Integer, ForeignKey("states.id"), nullable=False)
+    state_id = Column(Integer, ForeignKey('states.id'), nullable=False)
