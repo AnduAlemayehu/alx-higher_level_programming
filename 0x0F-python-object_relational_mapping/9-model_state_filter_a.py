@@ -1,41 +1,51 @@
 #!/usr/bin/python3
 
-# Lists all State objects that contain the letter a
+"""
 
-# from the database hbtn_0e_6_usa.
+Script that lists all `State` objects that contain
 
-# Usage: ./9-model_state_filter_a.py <mysql username> /
+the letter `a` from the database `hbtn_0e_6_usa`.
 
-#                                    <mysql password> /
+Arguments:
 
-#                                    <database name>
+    mysql username (str)
+
+    mysql password (str)
+
+    database name (str)
+
+"""
 
 import sys
 
-from sqlalchemy import create_engine
+from sqlalchemy import (create_engine)
 
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 
-from model_state import State
+from sqlalchemy.engine.url import URL
 
-
+from model_state import Base, State
 
 if __name__ == "__main__":
 
-    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
+    mySQL_u = sys.argv[1]
 
-                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+    mySQL_p = sys.argv[2]
 
-                           pool_pre_ping=True)
+    db_name = sys.argv[3]
 
-    Session = sessionmaker(bind=engine)
+    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
 
-    session = Session()
+           'username': mySQL_u, 'password': mySQL_p, 'database': db_name}
 
+    engine = create_engine(URL(**url), pool_pre_ping=True)
 
+    Base.metadata.create_all(engine)
 
-    for state in session.query(State).order_by(State.id):
+    session = Session(bind=engine)
 
-        if "a" in state.name:
+    q = session.query(State).filter(State.name.like('%a%')).order_by(State.id)
 
-            print("{}: {}".format(state.id, state.name))
+    for instance in q:
+
+        print("{}: {}".format(instance.id, instance.name))

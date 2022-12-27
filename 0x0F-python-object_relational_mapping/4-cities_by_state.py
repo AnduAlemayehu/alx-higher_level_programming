@@ -1,33 +1,41 @@
 #!/usr/bin/python3
 
-# Lists all cities of the database hbtn_0e_4_usa, ordered by city id.
+"""
 
-# Usage: ./4-cities_by_state.py <mysql username> \
+Script that lists all `cities` from the database `hbtn_0e_4_usa`.
 
-#                               <mysql password> \
+Arguments:
 
-#                               <database name>
+    mysql username (str)
+
+    mysql password (str)
+
+    database name (str)
+
+"""
 
 import sys
 
 import MySQLdb
 
-
-
 if __name__ == "__main__":
 
-    db = MySQLdb.connect(user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
+    mySQL_u = sys.argv[1]
 
-    c = db.cursor()
+    mySQL_p = sys.argv[2]
 
-    c.execute("SELECT `c`.`id`, `c`.`name`, `s`.`name` \
+    db_name = sys.argv[3]
 
-                 FROM `cities` as `c` \
+    # By default, it will connect to localhost:3306
 
-                INNER JOIN `states` as `s` \
+    db = MySQLdb.connect(user=mySQL_u, passwd=mySQL_p, db=db_name)
 
-                   ON `c`.`state_id` = `s`.`id` \
+    cur = db.cursor()
 
-                ORDER BY `c`.`id`")
+    cur.execute("SELECT c.id, c.name, s.name FROM cities c INNER JOIN states s
+            ON c.state_id = s.id ORDER BY c.id")
 
-    [print(city) for city in c.fetchall()]
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)
