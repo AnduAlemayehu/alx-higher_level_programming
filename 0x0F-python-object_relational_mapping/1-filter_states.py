@@ -2,50 +2,40 @@
 
 """
 
-Script that lists all `states` from the database `hbtn_0e_0_usa`.
+Script that lists all `states` with a name starting
+
+with `N` from the database `hbtn_0e_0_usa`.
 
 Arguments:
 
-        mysql username (str)
+    mysql username (str)
 
-            mysql password (str)
+    mysql password (str)
 
-                database name (str)
+    database name (str)
 
-                """
+"""
 
+import sys
 
+import MySQLdb
 
-                import sys
+if __name__ == "__main__":
 
-                import MySQLdb
+    mySQL_u = sys.argv[1]
 
+    mySQL_p = sys.argv[2]
 
+    db_name = sys.argv[3]
 
-                if __name__ == "__main__":
+    # By default, it will connect to localhost:3306
 
-                        mySQL_u = sys.argv[1]
+    db = MySQLdb.connect(user=mySQL_u, passwd=mySQL_p, db=db_name)
 
-                            mySQL_p = sys.argv[2]
+    cur = db.cursor()
 
-                                db_name = sys.argv[3]
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' ORDER BY id")
 
-
-
-                                    # By default, it will connect to localhost:3306
-
-                                        db = MySQLdb.connect(user=mySQL_u, passwd=mySQL_p, db=db_name)
-
-                                            cur = db.cursor()
-
-
-
-                                                cur.execute("SELECT * FROM states ORDER BY id")
-
-                                                    rows = cur.fetchall()
-
-
-
-                                                        for row in rows:
-
-                                                                    print(row)
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
